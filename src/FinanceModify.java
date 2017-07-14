@@ -74,6 +74,7 @@ public class FinanceModify extends JFrame {
 	private JMenuItem mntmStudentPaymentList;
 	private JMenuItem mntmNewMenuItem;
 	private JMenuItem mntmFinanceInput;
+	private JLabel lblToFindInformation;
 
 
 	/**
@@ -322,11 +323,11 @@ public class FinanceModify extends JFrame {
 				StudentFinanceQueries sq=new StudentFinanceQueries();
 				int results3=sq.deleteall();
 				if (results3==0)
-					JOptionPane.showMessageDialog(rootPane, "Delete Failed", "Delete Failed", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(rootPane, "No Data", "No Data", JOptionPane.PLAIN_MESSAGE);
 				else
-				{	JOptionPane.showMessageDialog(rootPane, "All Data was deleted", "All Data was deleted", JOptionPane.PLAIN_MESSAGE);
+				{	JOptionPane.showMessageDialog(rootPane, "All Data was deleted", "All Data was deleted", JOptionPane.PLAIN_MESSAGE);}
 								
-					FileInputStream fileIn=null;
+				{	FileInputStream fileIn=null;
 					try {
 						fileIn = new FileInputStream(new File("backup.xlsx"));
 					} catch (FileNotFoundException e2) {
@@ -344,7 +345,6 @@ public class FinanceModify extends JFrame {
 					XSSFSheet sheet=wb.getSheetAt(0);
 					Row row;
 												
-					StudentFinanceQueries sq1=new StudentFinanceQueries();
 					for(int i=1; i<=sheet.getLastRowNum(); i++)
 					{	row=sheet.getRow(i);
 						String col1=row.getCell(0).getStringCellValue();
@@ -374,11 +374,12 @@ public class FinanceModify extends JFrame {
 						String col25=row.getCell(24).getStringCellValue();
 						String col26=row.getCell(25).getStringCellValue();
 						String col27=row.getCell(26).getStringCellValue();
+						
+						StudentFinanceQueries sq1=new StudentFinanceQueries();
 						results2=sq1.restorefile(col1, col2, col3, col4, col5, col6, col7, col8, col9, 
 								col10, col11, col12, col13, col14, col15, col16, col17, col18, col19, 
 								col20, col21, col22, col23, col24, col25, col26, col27);
-						if (results2==0)
-							break;
+						
 					}
 					
 					if (results2==0)
@@ -436,10 +437,10 @@ public class FinanceModify extends JFrame {
 				
 				if (numberOfEntries==0)
 				{
-					JOptionPane.showMessageDialog(rootPane, "No StudentID!! Please Input Student Information First!!", "No StudentID!", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(rootPane, "No Finance Information!! Please Input Finance Information First!!", "No StudentID!", JOptionPane.PLAIN_MESSAGE);
 					close();
-					StudentDisplay student=new StudentDisplay();
-					student.setVisible(true);
+					FinanceDisplay finance=new FinanceDisplay();
+					finance.setVisible(true);
 				}
 				else 
 				{	
@@ -658,7 +659,7 @@ public class FinanceModify extends JFrame {
 						T7.getText(), T7Cost.getText(), T8.getText(), T8Cost.getText(), T9.getText(), T9Cost.getText(),
 						TotalCost.getText(), Scholarship.getText(), StudentID.getText(), StudentName.getText());
 						
-				if (result!=01)
+				if (result==1)
 					JOptionPane.showMessageDialog(getContentPane(), "Finance Infomation was modified!", "Finance Infomation was modified!", JOptionPane.PLAIN_MESSAGE);
 				else
 					JOptionPane.showMessageDialog(getContentPane(), "Finance Infomation not modified!", "Error", JOptionPane.PLAIN_MESSAGE); 
@@ -695,6 +696,11 @@ public class FinanceModify extends JFrame {
 		});
 		btnNewButton.setBounds(281, 430, 143, 25);
 		getContentPane().add(btnNewButton);
+		
+		lblToFindInformation = new JLabel("*Input Payment Year, Payment Month, and StudentID,  and then click Find button");
+		lblToFindInformation.setFont(new Font("Dialog", Font.ITALIC, 10));
+		lblToFindInformation.setBounds(41, 53, 602, 15);
+		getContentPane().add(lblToFindInformation);
 			
 		
 	}

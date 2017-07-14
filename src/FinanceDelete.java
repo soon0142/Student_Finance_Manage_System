@@ -73,6 +73,7 @@ public class FinanceDelete extends JFrame {
 	private JMenuItem mntmStudentPaymentList;
 	private JMenuItem mntmNewMenuItem;
 	private JMenuItem mntmFinanceInput;
+	private JLabel label;
 	
 
 	/**
@@ -324,11 +325,11 @@ public void close(){
 				StudentFinanceQueries sq=new StudentFinanceQueries();
 				int results3=sq.deleteall();
 				if (results3==0)
-					JOptionPane.showMessageDialog(rootPane, "Delete Failed", "Delete Failed", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(rootPane, "No Data", "No Data", JOptionPane.PLAIN_MESSAGE);
 				else
-				{	JOptionPane.showMessageDialog(rootPane, "All Data was deleted", "All Data was deleted", JOptionPane.PLAIN_MESSAGE);
+				{	JOptionPane.showMessageDialog(rootPane, "All Data was deleted", "All Data was deleted", JOptionPane.PLAIN_MESSAGE);}
 								
-					FileInputStream fileIn=null;
+				{	FileInputStream fileIn=null;
 					try {
 						fileIn = new FileInputStream(new File("backup.xlsx"));
 					} catch (FileNotFoundException e2) {
@@ -346,7 +347,6 @@ public void close(){
 					XSSFSheet sheet=wb.getSheetAt(0);
 					Row row;
 												
-					StudentFinanceQueries sq1=new StudentFinanceQueries();
 					for(int i=1; i<=sheet.getLastRowNum(); i++)
 					{	row=sheet.getRow(i);
 						String col1=row.getCell(0).getStringCellValue();
@@ -376,11 +376,12 @@ public void close(){
 						String col25=row.getCell(24).getStringCellValue();
 						String col26=row.getCell(25).getStringCellValue();
 						String col27=row.getCell(26).getStringCellValue();
+						
+						StudentFinanceQueries sq1=new StudentFinanceQueries();
 						results2=sq1.restorefile(col1, col2, col3, col4, col5, col6, col7, col8, col9, 
 								col10, col11, col12, col13, col14, col15, col16, col17, col18, col19, 
 								col20, col21, col22, col23, col24, col25, col26, col27);
-						if (results2==0)
-							break;
+						
 					}
 					
 					if (results2==0)
@@ -693,6 +694,11 @@ public void close(){
 		});
 		btnNewButton.setBounds(281, 430, 143, 25);
 		getContentPane().add(btnNewButton);
+		
+		label = new JLabel("*Input Payment Year, Payment Month, and StudentID,  and then click Find button");
+		label.setFont(new Font("Dialog", Font.ITALIC, 10));
+		label.setBounds(41, 55, 602, 15);
+		getContentPane().add(label);
 			
 		
 	}

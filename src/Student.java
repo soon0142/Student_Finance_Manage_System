@@ -7,15 +7,13 @@ public class Student {
 	private String StudentName;
 	private String StudentPhone;
 	private String StudentEmail;
-	private String SchoolName;
 	private int Grade;
 	private String Dob;
 	private String Address;
 	private String Hobby;
-	private Blob StudentPhoto;
+	private byte[] StudentPhoto;
 	private String Gender;
 	private String EntMoveinMoveout;
-	
 	private String EntInOutDate;
 	private String MomName;
 	private String MomPhone;
@@ -23,7 +21,6 @@ public class Student {
 	private String DadName;
 	private String DadPhone;
 	private String DadEmail;
-	private String TeacherName;
 	private String Faith;
 	private String Baptizement;
 	private String AwardPunish;
@@ -40,15 +37,14 @@ public class Student {
 		setStudentName(studentname);
 	}
 	
-	public Student(int id, String studentname, String studentphone, String studentemail, String school, int grd, String dob,String address,
-			String hobby, Blob photo, String gender, String entMoveinMoveout, String entInOutDate, String momname, String momphone, String momemail, String dadname, String dadphone, 
-			String dademail, String teacher, String faith, String baptizement, String awardPunish, String awardPunContent){
+	public Student(int id, String studentname, String studentphone, String studentemail, int grd, String dob,String address,
+			String hobby, byte[] photo, String gender, String entMoveinMoveout, String entInOutDate, String momname, String momphone, String momemail, String dadname, String dadphone, 
+			String dademail, String faith, String baptizement, String awardPunish, String awardPunContent){
 		
 		setStudentID(id);
 		setStudentName(studentname);
 		setStudentPhone(studentphone);
 		setStudentEmail(studentemail);
-		setSchoolName(school);
 		setGrade(grd);
 		setDob(dob);
 		setAddress(address);
@@ -63,7 +59,6 @@ public class Student {
 		setDadName(dadname);
 		setDadPhone(dadphone);
 		setDadEmail(dademail);
-		setTeacherName(teacher);
 		setFaith(faith);
 		setBaptizement(baptizement);
 		setAwardPunish(awardPunish);
@@ -72,6 +67,8 @@ public class Student {
 	}
 	
 	
+	
+
 	public int getStudentID() {
 		return StudentID;
 	}
@@ -102,14 +99,6 @@ public class Student {
 
 	public void setStudentEmail(String studentemail) {
 		StudentEmail = studentemail;
-	}
-
-	public String getSchoolName() {
-		return SchoolName;
-	}
-
-	public void setSchoolName(String school) {
-		SchoolName = school;
 	}
 
 	public int getGrade() {
@@ -145,11 +134,11 @@ public class Student {
 	}
 	
 	
-	public Blob getStudentPhoto() {
+	public byte[] getStudentPhoto() {
 		return StudentPhoto;
 	}
 
-	public void setStudentPhoto(Blob photo) {
+	public void setStudentPhoto(byte[] photo) {
 		StudentPhoto = photo;
 	}
 
@@ -225,14 +214,6 @@ public class Student {
 		DadEmail = dademail;
 	}
 
-	public String getTeacherName() {
-		return TeacherName;
-	}
-
-	public void setTeacherName(String teacher) {
-		TeacherName = teacher;
-	}
-	
 	public String getFaith() {
 		return Faith;
 	}

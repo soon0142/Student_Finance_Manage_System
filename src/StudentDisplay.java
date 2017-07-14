@@ -20,6 +20,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -27,6 +35,12 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 public class StudentDisplay extends JFrame {
@@ -46,9 +60,12 @@ public class StudentDisplay extends JFrame {
 	private JTextField Address;
 	String s;
 	private JTextField StudentID;
-	private Student currentEntry;
+	private Student currententry1;
+	private List<Student> results1;
+	private int numberOfEntries=0;
 	private JTextField EntInOutDate;
 	private JTextField AwardPunContent;
+	private int results2;
 	
 
 	/**
@@ -104,6 +121,248 @@ public class StudentDisplay extends JFrame {
 		});
 		
 		mnInput.add(mntmInputFinance);
+		
+		JMenuItem mntmInputStudent = new JMenuItem("Input Student");
+		mntmInputStudent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				close();
+				StudentDisplay student=new StudentDisplay();
+				student.setVisible(true);
+			}
+		});
+		mnInput.add(mntmInputStudent);
+		
+		JMenu mnModifyAndDelete = new JMenu("Modify and Delete");
+		mnModifyAndDelete.setMnemonic('M');
+		menuBar.add(mnModifyAndDelete);
+		
+		JMenuItem mntmModify = new JMenuItem("Modify");
+		mntmModify.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				close();
+				StudentModify modify=new StudentModify();
+				modify.setVisible(true);
+			}
+		});
+		mnModifyAndDelete.add(mntmModify);
+		
+		JMenuItem mntmDelete = new JMenuItem("Delete");
+		mntmDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				close();
+				StudentDelete delete=new StudentDelete();
+				delete.setVisible(true);
+			}
+		});
+		mnModifyAndDelete.add(mntmDelete);
+		
+		JMenu mnNewMenu = new JMenu("Search and Print");
+		mnNewMenu.setMnemonic('S');
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmSearch = new JMenuItem("Search");
+		mntmSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SearchStudents search=new SearchStudents();
+				search.setVisible(true);
+			}
+		});
+		mnNewMenu.add(mntmSearch);
+		
+		JMenu mnDataManagement = new JMenu("Data Management");
+		mnDataManagement.setMnemonic('D');
+		menuBar.add(mnDataManagement);
+		
+		JMenuItem mntmBackup = new JMenuItem("Backup");
+		mntmBackup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				XSSFWorkbook workbook = new XSSFWorkbook(); 
+				XSSFSheet spreadsheet=workbook.createSheet("Backup student file");
+				XSSFRow row;
+				String filename="";
+								
+				StudentFinanceQueries sq=new StudentFinanceQueries();
+				results1=sq.backupstudentfile();
+				numberOfEntries=results1.size();
+				
+				if (numberOfEntries==0)
+				{
+					JOptionPane.showMessageDialog(rootPane, "No Student Lists!!", "No Student Lists!", JOptionPane.PLAIN_MESSAGE);
+				}
+				else 
+				{	
+					Map <String, Object[]> backupstudentlists=new TreeMap <String, Object[]>();
+                  	backupstudentlists.put("1", new Object[] {"StudentID","StudentName","StudentPhone","StudentEmail","Grade","Dob","Address","Hobbies","Gender",
+							"EntMoveinMoveout","EntInOutDate","MomName","MomPhone","MomEmail","DadName","DadPhone","DadEmail","Faith","Baptizement","AwardPunish","AwardPunContent"});
+					                  	
+                  	
+                    for(int i=0;i<numberOfEntries;i++)
+                    {
+                          currententry1=results1.get(i);
+                          String str1=String.valueOf(currententry1.getStudentID());
+                          String str2=currententry1.getStudentName();
+                          String str3=currententry1.getStudentPhone();
+                          String str4=currententry1.getStudentEmail();
+                          String str5=String.valueOf(currententry1.getGrade());
+                          String str6=currententry1.getDob();
+                          String str7=currententry1.getAddress();
+                          String str8=currententry1.getHobby();
+                          String str10=currententry1.getGender();
+                          String str11=currententry1.getEntMoveinMoveout();
+                          String str12=currententry1.getEntInOutDate();
+                          String str13=currententry1.getMomName();
+                          String str14=currententry1.getMomPhone();
+                          String str15=currententry1.getMomEmail();
+                          String str16=currententry1.getDadName();
+                          String str17=currententry1.getDadPhone();
+                          String str18=currententry1.getDadEmail();
+                          String str19=currententry1.getFaith();
+                          String str20=currententry1.getBaptizement();
+                          String str21=currententry1.getAwardPunish();
+                          String str22=currententry1.getAwardPunContent();
+                         
+                          
+                          backupstudentlists.put(String.valueOf(i+2), new Object[] 
+                        		  {
+                        	         str1, 
+                                     str2,
+                                     str3, 
+                                     str4,
+                                     str5,
+                                     str6,
+                                     str7,
+                                     str8,
+                                     str10,
+                                     str11,
+                                     str12,
+                                     str13,
+                                     str14,
+                                     str15,
+                                     str16,
+                                     str17,
+                                     str18,
+                                     str19,
+                                     str20,
+                                     str21,
+                                     str22
+                           		  }
+                          );
+                         Set <String> keyid=backupstudentlists.keySet();
+                         int rowid=0;
+                         
+                         for(String key:keyid)
+                         {
+                        	 row=spreadsheet.createRow(rowid++);
+                        	 Object[] objectArr=backupstudentlists.get(key);
+                        	 int cellid=0;
+                        	 for(Object obj:objectArr)
+                        	 {
+                        		 Cell cell=row.createCell(cellid++);
+                        		 cell.setCellValue((String)obj);
+                        	 }
+                        	 
+                        	 FileOutputStream out=null;
+							try {
+								filename="studentbackup.xlsx";
+								out = new FileOutputStream(new File(filename));
+							} catch (FileNotFoundException e3) {
+								// TODO Auto-generated catch block
+								e3.printStackTrace();
+							}
+                        	 try {
+								workbook.write(out);
+							} catch (IOException e2) {
+								// TODO Auto-generated catch block
+								e2.printStackTrace();
+							}
+                        	 try {
+								out.close();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+                        	 
+                         }
+                        
+                    } 
+				}	
+				JOptionPane.showMessageDialog(rootPane, "Successfully backup into "+filename, "Successfully backup into "+filename, JOptionPane.PLAIN_MESSAGE);	
+				
+			}
+		});
+		mnDataManagement.add(mntmBackup);
+		
+		JMenuItem mntmRestore = new JMenuItem("Restore");
+		mntmRestore.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StudentFinanceQueries sq=new StudentFinanceQueries();
+				int results3=sq.deletestudentall();
+				if (results3==0)
+					JOptionPane.showMessageDialog(rootPane, "No Data", "No Data", JOptionPane.PLAIN_MESSAGE);
+				else
+				{	JOptionPane.showMessageDialog(rootPane, "All Data was deleted", "All Data was deleted", JOptionPane.PLAIN_MESSAGE);}
+								
+				{	FileInputStream fileIn=null;
+					try {
+						fileIn = new FileInputStream(new File("studentbackup.xlsx"));
+					} catch (FileNotFoundException e2) {
+					// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					XSSFWorkbook wb=null;
+					try {
+						wb = new XSSFWorkbook(fileIn);
+					} catch (IOException e1) {
+					// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				
+					XSSFSheet sheet=wb.getSheetAt(0);
+					Row row;
+										
+					for(int i=1; i<=sheet.getLastRowNum(); i++)
+					{	
+						row=sheet.getRow(i);
+						String col1=row.getCell(0).getStringCellValue();
+						String col2=row.getCell(1).getStringCellValue();
+						String col3=row.getCell(2).getStringCellValue();
+						String col4=row.getCell(3).getStringCellValue();
+						String col5=row.getCell(4).getStringCellValue();
+						String col6=row.getCell(5).getStringCellValue();
+						String col7=row.getCell(6).getStringCellValue();
+						String col8=row.getCell(7).getStringCellValue();
+						String col9=row.getCell(8).getStringCellValue();
+						String col10=row.getCell(9).getStringCellValue();
+						String col11=row.getCell(10).getStringCellValue();
+						String col12=row.getCell(11).getStringCellValue();
+						String col13=row.getCell(12).getStringCellValue();
+						String col14=row.getCell(13).getStringCellValue();
+						String col15=row.getCell(14).getStringCellValue();
+						String col16=row.getCell(15).getStringCellValue();
+						String col17=row.getCell(16).getStringCellValue();
+						String col18=row.getCell(17).getStringCellValue();
+						String col19=row.getCell(18).getStringCellValue();
+						String col20=row.getCell(19).getStringCellValue();
+						String col21=row.getCell(20).getStringCellValue();
+						
+						StudentFinanceQueries sq1=new StudentFinanceQueries();
+						results2=sq1.restorestudentfile(col1, col2, col3, col4, col5, col6, col7, col8, col9, 
+								col10, col11, col12, col13, col14, col15, col16, col17, col18, col19, 
+								col20, col21);
+					}
+					
+					if (results2==0)
+					{
+						JOptionPane.showMessageDialog(rootPane, "Restoring Failed", "Restoring Failed", JOptionPane.PLAIN_MESSAGE);	
+					}
+					else 
+					{	
+						JOptionPane.showMessageDialog(rootPane, "Successfully was restored!!", "Successfully was restored!!", JOptionPane.PLAIN_MESSAGE);
+					}
+				}
+			}
+		});
+		mnDataManagement.add(mntmRestore);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -298,7 +557,7 @@ public class StudentDisplay extends JFrame {
 		contentPane.add(Baptizement);
 		
 		final JComboBox EntMoveinMoveout = new JComboBox();
-		EntMoveinMoveout.setModel(new DefaultComboBoxModel(new String[] {"Enterance Date", "MoveIn Date ", "MoveOut Date"}));
+		EntMoveinMoveout.setModel(new DefaultComboBoxModel(new String[] {"Enterance Date", "Move In Date "}));
 		EntMoveinMoveout.setBounds(378, 338, 120, 24);
 		contentPane.add(EntMoveinMoveout);
 		
